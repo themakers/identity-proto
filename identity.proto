@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+option go_package = "identity_proto";
+
+package api.themakers.identity;
+
+service Identity {
+    rpc ListProviders(ProviderDetailsReq) returns (ProviderDetailsResp);
+
+    // Type 1
+    rpc Type1Request(Type1VerificationReq) returns (Type1VerificationDirections);
+    rpc Type1Result(Type1ResultRequest) returns (Type1ResultResp);
+
+    // Type 2
+    rpc Type2Request(Type2VerificationReq) returns (Type2VerificationResp);
+    rpc Type2Verify(Type2VerifyReq) returns (Type2ResultResp);
+
+    // Type 3
+    rpc OAuth2Verify(OAuth2Req) returns (OAuth2VerifyResp);
+}
+
+message Dummy {}
+
+////////////////////////////////////////////////////////////////
+////
+////
+
+message ProviderDetailsReq {}
+
+message ProviderDetailsResp {
+    repeated ProviderDetails Providers = 1;
+}
+
+message ProviderDetails {
+    string Name = 1;
+
+
+    bool SupportType1 = 2;
+    bool SupportType2 = 3;
+    bool SupportOAuth2 = 4;
+}
+
+////////////////////////////////////////////////////////////////
+//// Type 1
+////
+message Type1VerificationReq {
+    string Provider = 1;
+    string Identity = 2; // Optional
+}
+
+message Type1VerificationDirections {
+    string VerificationID = 1;
+    string Target = 2;
+    string SecurityCode = 3;
+}
+
+message Type1ResultRequest {
+    string VerificationID = 1;
+}
+
+message Type1ResultResp {
+    string Error = 1;
+}
+
+////////////////////////////////////////////////////////////////
+//// Type 2
+////
+message Type2VerificationReq {
+    string Provider = 1;
+    string Identity = 2;
+}
+
+message Type2VerificationResp {
+    string VerificationID = 1;
+}
+
+message Type2VerifyReq {
+    string VerificationID = 1;
+    string SecurityCode = 3;
+}
+
+message Type2ResultResp {
+    string Error = 1;
+}
+
+////////////////////////////////////////////////////////////////
+//// Type 3
+////
+
+message OAuth2Req {
+    string Provider = 1;
+    string Code = 2;
+}
+
+message OAuth2VerifyResp  {
+    string Error = 1;
+}
