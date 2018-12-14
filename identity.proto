@@ -59,7 +59,9 @@ message Type1ResultRequest {
 }
 
 message Type1ResultResp {
-    string Error = 1;
+    string Session = 1;
+    string User = 2;
+    string Error = 3;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -80,7 +82,9 @@ message Type2VerifyReq {
 }
 
 message Type2ResultResp {
-    string Error = 1;
+    string Session = 1;
+    string User = 2;
+    string Error = 3;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -93,5 +97,7 @@ message OAuth2Req {
 }
 
 message OAuth2VerifyResp  {
-    string Error = 1;
+    string Session = 1;
+    string User = 2;
+    string Error = 3;
 }
