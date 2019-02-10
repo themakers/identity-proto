@@ -4,6 +4,9 @@ option go_package = "identity_proto";
 
 package api.themakers.identity;
 
+////////////////////////////////////////////////////////////////
+////
+////
 service Identity {
     rpc ListProviders(ProviderDetailsReq) returns (ProviderDetailsResp);
 
@@ -97,6 +100,24 @@ message OAuth2Req {
 }
 
 message OAuth2VerifyResp  {
+    string Session = 1;
+    string User = 2;
+    string Error = 3;
+}
+
+
+////////////////////////////////////////////////////////////////
+////
+////
+service IdentityPrivate {
+    rpc LoginAs(LoginAsReq) returns (LoginAsResp);
+}
+
+message LoginAsReq {
+    string User = 1;
+}
+
+message LoginAsResp {
     string Session = 1;
     string User = 2;
     string Error = 3;
