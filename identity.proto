@@ -8,18 +8,27 @@ package api.themakers.identity;
 ////
 ////
 service Identity {
-    rpc ListProviders(ProviderDetailsReq) returns (ProviderDetailsResp);
+    //method for give identities and verifiers for server
+    rpc ListIdentitiesAndVerifiers (VerifiersDetailsRequest) returns (VerifierDetailsResponse);
+    //method for give identities and verifiers for user
+    rpc ListMyIdentitiesAndVerifiers (MyVerifiersDetailRequest) returns (VerifierDetailsResponse);
 
-    // Type 1
-    rpc Type1Request(Type1VerificationReq) returns (Type1VerificationDirections);
-    rpc Type1Result(Type1ResultRequest) returns (Type1ResultResp);
+    rpc CheckStatus (StatusReq) returns (Status);
 
-    // Type 2
-    rpc Type2Request(Type2VerificationReq) returns (Type2VerificationResp);
-    rpc Type2Verify(Type2VerifyReq) returns (Type2ResultResp);
+    rpc CancelAuthentication (CancelAuthenticationReq) returns (Status);
 
-    // Type 3
-    rpc OAuth2Verify(OAuth2Req) returns (OAuth2VerifyResp);
+    rpc InitializeStaticVerifier (InitializeStaticVerifierReq) returns (InitializeStaticVerifierResp);
+
+    rpc StartAuthentication (StartAuthenticationReq) returns (StartAuthenticationResp);
+
+    rpc StartVerification (StartVerificationReq) returns (StartVerificationResp);
+
+    rpc Verify (VerifyReq) returns (VerifyResp);
+
+    rpc Logout (LogoutReq) returns (Status);
+
+    rpc UserMerge (UserMergeReq) returns (UserMergeResp);
+
 }
 
 message Dummy {}
@@ -28,83 +37,115 @@ message Dummy {}
 ////
 ////
 
-message ProviderDetailsReq {}
+//// ListMessages
+message VerifiersDetailsRequest {}
 
-message ProviderDetailsResp {
-    repeated ProviderDetails Providers = 1;
+message VerifierDetailsResponse {
+    repeated string IdentitiyNames = 1;
+    repeated VerifierDetails Verifiers = 2;
+}
+message MyVerifiersDetailRequest {
+    //    string Identity = 1;
+    //    string VerifierName = 2;
 }
 
-message ProviderDetails {
-    string Name = 1;
-
-
-    bool SupportType1 = 2;
-    bool SupportType2 = 3;
-    bool SupportOAuth2 = 4;
-}
-
-////////////////////////////////////////////////////////////////
-//// Type 1
-////
-message Type1VerificationReq {
-    string Provider = 1;
-    string Identity = 2; // Optional
-}
-
-message Type1VerificationDirections {
-    string VerificationID = 1;
-    string Target = 2;
-    string SecurityCode = 3;
-}
-
-message Type1ResultRequest {
-    string VerificationID = 1;
-}
-
-message Type1ResultResp {
-    string Session = 1;
-    string User = 2;
-    string Error = 3;
-}
-
-////////////////////////////////////////////////////////////////
-//// Type 2
-////
-message Type2VerificationReq {
-    string Provider = 1;
+message StartVerificationReq {
+    string VerifierName = 1;
     string Identity = 2;
+    map<string, string> VerificationData = 3;
 }
 
-message Type2VerificationResp {
-    string VerificationID = 1;
+message StartVerificationResp {
+    string AuthenticationID = 1;
+    //    string VerifierName = 1;
+    //    string VerificationCode = 2;
+    //    string Identity = 3;
+    //    string IdentityName = 4;
+
 }
 
-message Type2VerifyReq {
-    string VerificationID = 1;
-    string SecurityCode = 3;
+message StatusReq {
+
 }
 
-message Type2ResultResp {
-    string Session = 1;
-    string User = 2;
-    string Error = 3;
+message Status {
+    bool Authenticated = 1;
+    bool Authenticating = 2;
+    int64 RemainingFactors = 3;
+    string SessionID = 4;
 }
 
-////////////////////////////////////////////////////////////////
-//// Type 3
-////
+message UserMergeReq {
 
-message OAuth2Req {
-    string Provider = 1;
-    string Code = 2;
 }
 
-message OAuth2VerifyResp  {
-    string Session = 1;
-    string User = 2;
-    string Error = 3;
+message UserMergeResp {
+
 }
 
+message CancelAuthenticationReq {
+
+}
+
+message LogoutReq {
+    bool AllSessions=1;
+}
+
+message InitializeStaticVerifierReq {
+    string VerifierName = 1;
+    map<string, string> InitializationData = 2;
+    //map<string, bytes> InitalizationData = 2;
+}
+//////////////////////
+
+
+message InitializeStaticVerifierResp{
+    bytes InitializationResult = 1;
+
+}
+//// Authentication messages
+message StartAuthenticationReq {
+    string VerifierName = 1;
+}
+
+message VerifyReq {
+    string VerifierName = 1;
+    string AuthenticationID = 2;
+    string VerificationCode = 3;
+    string Identity = 4;
+    //    string IdentityName = 4;
+}
+
+message StartAuthenticationResp {
+    bool AuthenticationSessionExist = 1;
+    //map<string, string> VerificationDirections=1;
+}
+
+message VerifyResp {
+    bool VerifyStatus = 1;
+}
+////////////////////////////
+
+///// Support types
+message VerifierDetails {
+    string Name = 1;
+    string IdentityName = 2;
+
+    bool SupportRegular = 3;
+    bool SupportReverse = 4;
+    bool SupportOAuth2 = 5;
+    bool SupportStatic = 6;
+}
+
+message IdentityData {
+    string name = 1;
+    string identity = 2;
+}
+
+message UserDetails {
+    string ID = 1;
+    repeated IdentityData identities = 2;
+}
 
 ////////////////////////////////////////////////////////////////
 ////
