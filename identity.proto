@@ -8,7 +8,6 @@ package api.themakers.identity;
 ////
 ////
 service Identity {
-    //method for give identities and verifiers for server
     rpc ListSupportedIdentitiesAndVerifiers (ListSupportedIdentitiesAndVerifiersReq) returns (VerifierDetailsResp);
 
     rpc CheckStatus (StatusReq) returns (Status);
@@ -48,7 +47,6 @@ service Identity {
     //
     // This methods can be called only when there is an active authentication process
     //
-
     rpc CancelAuthentication (CancelAuthenticationReq) returns (Status);
 
 
@@ -103,11 +101,6 @@ message StartReq {
 }
 message StartResp {
     map<string, string> Directions = 3;
-    //    string AuthenticationID = 1;
-    //    string VerifierName = 1;
-    //    string VerificationCode = 2;
-    //    string Identity = 3;
-    //    string IdentityName = 4;
 }
 
 message StatusReq {}
@@ -132,7 +125,15 @@ message StatusAuthenticating {
         bool Attach = 3;
     }
 
-    int64 RemainingFactors = 4;
+    repeated StatusCompletedFactors CompletedFactors = 4;
+
+    int64 RemainingFactors = 5;
+}
+
+message StatusCompletedFactors {
+    string VerifierName = 1;
+    string IdentityName = 2;
+    string Identity = 3;
 }
 
 message UserMergeReq {
@@ -170,7 +171,7 @@ service IdentityPrivate {
     rpc LoginAs(LoginAsReq) returns (LoginAsResp);
 
     // TODO
-    // rpc getLastVerificationTime(LoginAsReq) returns (LoginAsResp);
+    // rpc GetLastVerificationTime() returns ();
 }
 
 message LoginAsReq {
