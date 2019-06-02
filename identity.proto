@@ -107,11 +107,8 @@ message StatusReq {}
 
 message Status {
     string Token = 1;
-    oneof Status {
-        bool Unauthenticated = 2;
-        StatusAuthenticating Authenticating = 3;
-        StatusAuthenticated Authenticated = 4;
-    }
+    StatusAuthenticating Authenticating = 2;
+    StatusAuthenticated Authenticated = 3;
 }
 
 message StatusAuthenticated {
