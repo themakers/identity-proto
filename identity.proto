@@ -52,7 +52,7 @@ service Identity {
 
     // Applicable on authenticated requests or on requests with active authentication process with
     // at least one factor passed
-    rpc ListMyIdentitiesAndVerifiers (ListMyIdentitiesAndVerifiersReq) returns (VerifierDetailsResp);
+    rpc ListMyIdentitiesAndVerifiers (ListMyIdentitiesAndVerifiersReq) returns (ListMyIdentitiesAndVerifiersResp);
 
     rpc Start (StartReq) returns (StartResp);
 
@@ -92,6 +92,15 @@ message VerifierDetails {
     bool SupportStatic = 6;
 }
 
+message ListMyIdentitiesAndVerifiersResp {
+    repeated IdentityData Identities = 1;
+    repeated string Verifiers = 2;
+}
+
+message IdentityData {
+    string Name = 1;
+    string Identity = 2;
+}
 
 message StartReq {
     string VerifierName = 1;
