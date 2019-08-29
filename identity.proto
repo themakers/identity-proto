@@ -107,6 +107,8 @@ message StartReq {
     string IdentityName = 2;
     string Identity = 3;
     map<string, string> Args = 4;
+
+    map<string, string> Values = 5;
 }
 message StartResp {
     map<string, string> Directions = 3;
