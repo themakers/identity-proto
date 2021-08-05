@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "identity_proto";
+option go_package = ".;identity_proto";
 
 package api.themakers.identity;
 
